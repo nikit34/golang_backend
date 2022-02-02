@@ -16,5 +16,5 @@ func TestCreateAccount(t *testing.T) {
 	}
 	account, err := testQueries.CreateAccount(context.Background(), arg)
 	require.NoError(t, err)
-	require.NoEmpty(t, account)
+	require.NotEmpty(t, account)
 }
