@@ -8,5 +8,4 @@ require (
 	github.com/spf13/viper v1.10.1
 	github.com/stretchr/testify v1.7.0
 	github.com/techschool/simplebank v0.0.0-20220205143037-9728acf31ca5
-	honnef.co/go/tools v0.0.1-2020.1.4
 )
