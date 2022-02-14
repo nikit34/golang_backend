@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	db "github.com/techschool/simplebank/db/sqlc"
+	db "github.com/nikit34/golang_backend/db/sqlc"
 )
 
 
