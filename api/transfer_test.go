@@ -11,9 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	mockdb "github.com/techschool/simplebank/db/mock"
-	db "github.com/techschool/simplebank/db/sqlc"
-	"github.com/techschool/simplebank/util"
+	mockdb "github.com/nikit34/golang_backend/db/mock"
+	db "github.com/nikit34/golang_backend/db/sqlc"
+	"github.com/nikit34/golang_backend/util"
 )
 
 func TestTransferAPI(t *testing.T) {
