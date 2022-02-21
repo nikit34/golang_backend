@@ -12,9 +12,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	mockdb "github.com/nikit34/simplebank/db/mock"
-	db "github.com/nikit34/simplebank/db/sqlc"
-	"github.com/nikit34/simplebank/util"
+	mockdb "github.com/nikit34/golang_backend/db/mock"
+	db "github.com/nikit34/golang_backend/db/sqlc"
+	"github.com/nikit34/golang_backend/util"
 )
 
 func TestCreateUserAPI(t *testing.T) {
