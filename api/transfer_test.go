@@ -89,8 +89,8 @@ func TestTransferAPI(t *testing.T) {
 			},
 			authUsername: "",
 			buildStubs: func(store *mockdb.MockStore) {
-				store.EXPECT().GetAccount(gomock.Any(), gomock.Any().Times(0)
-				store.EXPECT().TransferTx(gomock.Any(), gomock.Any().Times(0)
+				store.EXPECT().GetAccount(gomock.Any(), gomock.Any()).Times(0)
+				store.EXPECT().TransferTx(gomock.Any(), gomock.Any()).Times(0)
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusUnauthorized, recorder.Code)
