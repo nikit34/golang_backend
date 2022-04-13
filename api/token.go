@@ -7,8 +7,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/util"
 )
 
 type renewAccessTokenRequest struct {
@@ -61,7 +59,7 @@ func (server *Server) renewAccessToken(ctx *gin.Context) {
 		return
 	}
 
-	if time.Now().After(session.ExpiredAt) {
+	if time.Now().After(session.ExpiresAt) {
 		err := fmt.Errorf("expired session")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
