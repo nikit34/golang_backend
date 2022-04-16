@@ -1,4 +1,4 @@
-module github.com/nikit34/golang_backend
+module github.com/nikit34/template_backend
 
 go 1.13
 

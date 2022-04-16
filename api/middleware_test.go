@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nikit34/golang_backend/token"
+	"github.com/nikit34/template_backend/token"
 	"github.com/stretchr/testify/require"
 )
 

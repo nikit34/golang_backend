@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nikit34/golang_backend/token"
+	"github.com/nikit34/template_backend/token"
 )
 
 

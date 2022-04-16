@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/lib/pq"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/util"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/util"
 )
 
 

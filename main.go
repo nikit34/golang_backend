@@ -5,9 +5,9 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
-	"github.com/nikit34/golang_backend/api"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/util"
+	"github.com/nikit34/template_backend/api"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/util"
 )
 
 

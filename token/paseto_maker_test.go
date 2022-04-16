@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nikit34/golang_backend/util"
+	"github.com/nikit34/template_backend/util"
 	"github.com/stretchr/testify/require"
 )
 
@@ -48,4 +48,3 @@ func TestExpiredPasetoToken(t *testing.T) {
 	require.EqualError(t, err, ErrExpiredToken.Error())
 	require.Nil(t, payload)
 }
-

@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/token"
-	"github.com/nikit34/golang_backend/util"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/token"
+	"github.com/nikit34/template_backend/util"
 )
 
 

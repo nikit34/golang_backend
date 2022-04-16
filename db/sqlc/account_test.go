@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nikit34/template_backend/util"
 	"github.com/stretchr/testify/require"
-	"github.com/nikit34/golang_backend/util"
 )
 
 

@@ -12,11 +12,11 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lib/pq"
 	"github.com/golang/mock/gomock"
-	mockdb "github.com/nikit34/golang_backend/db/mock"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/util"
+	"github.com/lib/pq"
+	mockdb "github.com/nikit34/template_backend/db/mock"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/util"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/token"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/token"
 )
 
 

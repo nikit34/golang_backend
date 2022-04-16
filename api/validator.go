@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/nikit34/golang_backend/util"
+	"github.com/nikit34/template_backend/util"
 )
 
 

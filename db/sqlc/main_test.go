@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
-	"github.com/nikit34/golang_backend/util"
+	"github.com/nikit34/template_backend/util"
 )
 
 
@@ -24,7 +24,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal("cannot connect to db: ", err)
 	}
-	
+
 	testQueries = New(testDB)
 	os.Exit(m.Run())
 }

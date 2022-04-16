@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	db "github.com/nikit34/golang_backend/db/sqlc"
-	"github.com/nikit34/golang_backend/token"
-	"github.com/nikit34/golang_backend/util"
+	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/token"
+	"github.com/nikit34/template_backend/util"
 	"github.com/stretchr/testify/require"
 )
 
