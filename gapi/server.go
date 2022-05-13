@@ -2,14 +2,16 @@ package gapi
 
 import (
 	"fmt"
-	
+
 	db "github.com/nikit34/template_backend/db/sqlc"
+	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/token"
 	"github.com/nikit34/template_backend/util"
 )
 
 
 type Server struct {
+	pb.UnimplementedTemplateBackendServer
 	store db.Store
 	config util.Config
 	tokenMaker token.Maker

@@ -13,7 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
-	mockdb "github.com/nikit34/golang_backend/db/mock"
+	mockdb "github.com/nikit34/template_backend/db/mock"
 	db "github.com/nikit34/template_backend/db/sqlc"
 	"github.com/nikit34/template_backend/token"
 	"github.com/nikit34/template_backend/util"
