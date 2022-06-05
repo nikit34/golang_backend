@@ -41,7 +41,7 @@ mock:
 
 proto:
 	rm -f pb/*.go
-	protoc --proto_path=proto proto/*.proto --go_out=. --go-grpc_out=.
+	protoc --proto_path=proto --go_out=. --go-grpc_out=. --grpc-gateway_out=. proto/*.proto
 
 evans:
 	evans --host localhost --port 9090 -r repl
