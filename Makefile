@@ -41,7 +41,15 @@ mock:
 
 proto:
 	rm -f pb/*.go
-	protoc --proto_path=proto --go_out=. --go-grpc_out=. --grpc-gateway_out=. proto/*.proto
+	rm -rf doc/swagger/*.swagger.json
+	protoc \
+	--proto_path=proto \
+	--go_out=. \
+	--go-grpc_out=. \
+	--grpc-gateway_out=. \
+	--openapiv2_out=doc/swagger \
+	--openapiv2_opt=allow_merge=true,merge_file_name=template_backend \
+	proto/*.proto
 
 evans:
 	evans --host localhost --port 9090 -r repl

@@ -7,6 +7,18 @@ import "rpc_login_user.proto";
 import "google/api/annotations.proto";
 
 
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    info: {
+        title: "Template Backend API";
+        version: "1.0";
+        contact: {
+            name: "nikit34";
+            url: "https://github.com/nikit34";
+            email: "permikov134@yandex.ru";
+        };
+    };
+};
+
 service TemplateBackend {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
         option (google.api.http) = {
