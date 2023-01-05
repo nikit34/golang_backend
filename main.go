@@ -7,14 +7,15 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/rakyll/statik/fs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"github.com/rakyll/statik/fs"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"google.golang.org/protobuf/encoding/protojson"
 
-	_ "github.com/nikit34/template_backend/doc/statik"
 	"github.com/nikit34/template_backend/api"
 	"github.com/nikit34/template_backend/db/sqlc"
+	_ "github.com/nikit34/template_backend/doc/statik"
 	"github.com/nikit34/template_backend/gapi"
 	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/util"
@@ -66,7 +67,19 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal("cannot create server: ", err)
 	}
 
-	grpcMux := runtime.NewServeMux()
+	grpcMux := runtime.NewServeMux(
+		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.HTTPBodyMarshaler{
+		Marshaler: &runtime.JSONPb{
+			MarshalOptions: protojson.MarshalOptions{
+				UseProtoNames:   true,
+				EmitUnpopulated: true,
+			},
+			UnmarshalOptions: protojson.UnmarshalOptions{
+				DiscardUnknown: true,
+			},
+		},
+	}),
+	)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
