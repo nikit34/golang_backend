@@ -4,6 +4,7 @@ option go_package = "./pb";
 
 import "rpc_create_user.proto";
 import "rpc_login_user.proto";
+import "rpc_update_user.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -11,7 +12,7 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     info: {
         title: "Template Backend API";
-        version: "1.1";
+        version: "1.2";
         contact: {
             name: "nikit34";
             url: "https://github.com/nikit34";
@@ -41,5 +42,16 @@ service TemplateBackend {
             description: "Use this API to login user and get access token & refresh token"
             summary: "Login user"
         };
+    }
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+        option (google.api.http) = {
+            patch: "/v1/update_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            description: "Use this API to update user"
+            summary: "Update user"
+        };
+
     }
 }

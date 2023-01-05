@@ -47,7 +47,6 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	rsp := &pb.CreateUserResponse{
 		User: convertUser(user),
 	}
-	status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 	return rsp, nil
 }
 
