@@ -13,6 +13,7 @@ require (
 	github.com/lib/pq v1.10.4
 	github.com/o1egl/paseto v1.0.0
 	github.com/rakyll/statik v0.1.7
+	github.com/rs/zerolog v1.28.0
 	github.com/spf13/viper v1.10.1
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838
