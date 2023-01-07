@@ -10,6 +10,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.10.3
+	github.com/hibiken/asynq v0.24.0 // indirect
 	github.com/lib/pq v1.10.4
 	github.com/o1egl/paseto v1.0.0
 	github.com/rakyll/statik v0.1.7
