@@ -35,7 +35,7 @@ func main() {
 		log.Fatal().Msg("cannot load config")
 	}
 
-	if config.Environment == "development" {
+	if config.Environment != "development" {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
