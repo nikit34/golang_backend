@@ -22,7 +22,7 @@ type Metadata struct {
 
 func (server *Server) extractMetadata(ctx context.Context) *Metadata {
 	mtdt := &Metadata{}
-	if md, ok := metadata.FromOutgoingContext(ctx); ok {
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
 		log.Printf("md: %+v\n", md)
 		if userAgents := md.Get(grpcGatewayUserAgentHeader); len(userAgents) > 0 {
 			mtdt.UserAgent = userAgents[0]
