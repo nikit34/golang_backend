@@ -42,7 +42,7 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/nikit34/template_backend/db/sqlc Store
 
-proto:
+protoc:
 	rm -f pb/*.go
 	rm -rf doc/swagger/*.swagger.json
 	protoc \
@@ -76,6 +76,6 @@ redis:
 	test
 	server
 	mock
-	proto
+	protoc
 	evans
 	redis
