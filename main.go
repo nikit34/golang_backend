@@ -23,6 +23,7 @@ import (
 	"github.com/nikit34/template_backend/db/sqlc"
 	_ "github.com/nikit34/template_backend/doc/statik"
 	"github.com/nikit34/template_backend/gapi"
+	"github.com/nikit34/template_backend/mail"
 	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/util"
 	"github.com/nikit34/template_backend/worker"
@@ -72,8 +73,9 @@ func runDBMigration(migrationURL, dbSource string) {
 	log.Info().Msg("db successfully migrated")
 }
 
-func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store)
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
+	mailer := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 	log.Info().Msg("running task processor")
 	err := taskProcessor.Start()
 	if err != nil {
