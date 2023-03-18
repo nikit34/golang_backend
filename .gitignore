@@ -1,6 +1,4 @@
 node_modules/
 package-lock.json
 package.json
-pb/
-db/migration/
-db/mock/
+.vscode/
