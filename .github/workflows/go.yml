@@ -3,13 +3,12 @@ name: ci-test
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
 
   test:
-    name: Test
+    name: Tests
     runs-on: ubuntu-latest
 
     services:
