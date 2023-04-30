@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"reflect"
 	"testing"
@@ -11,14 +12,18 @@ import (
 	db "github.com/nikit34/template_backend/db/sqlc"
 	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/util"
+	"github.com/nikit34/template_backend/worker"
 	mockwk "github.com/nikit34/template_backend/worker/mock"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 
 type eqCreateUserTxParamsMatcher struct {
 	arg db.CreateUserTxParams
 	password string
+	user db.User
 }
 
 func (expected eqCreateUserTxParamsMatcher) Matches(x interface{}) bool {
@@ -33,15 +38,20 @@ func (expected eqCreateUserTxParamsMatcher) Matches(x interface{}) bool {
 	}
 
 	expected.arg.HashedPassword = actualArg.HashedPassword
-	return reflect.DeepEqual(expected.arg.CreateUserParams, actualArg.CreateUserParams)
+	if !reflect.DeepEqual(expected.arg.CreateUserParams, actualArg.CreateUserParams) {
+		return false
+	}
+
+	err = actualArg.AfterCreate(expected.user)
+	return err == nil
 }
 
 func (e eqCreateUserTxParamsMatcher) String() string {
 	return fmt.Sprintf("matches arg %v and password %v", e.arg, e.password)
 }
 
-func EqCreateUserTxParams(arg db.CreateUserTxParams, password string) gomock.Matcher {
-	return eqCreateUserTxParamsMatcher{arg, password}
+func EqCreateUserTxParams(arg db.CreateUserTxParams, password string, user db.User) gomock.Matcher {
+	return eqCreateUserTxParamsMatcher{arg, password, user}
 }
 
 func TestCreateUserAPI(t *testing.T) {
@@ -50,7 +60,7 @@ func TestCreateUserAPI(t *testing.T) {
 	testCases := []struct {
 		name string
 		req *pb.CreateUserRequest
-		buildStubs func(store *mockdb.MockStore)
+		buildStubs func(store *mockdb.MockStore, taskDistributor *mockwk.MockTaskDistributor)
 		checkResponse func(t *testing.T, res *pb.CreateUserResponse, err error)
 	}{
 		{
@@ -61,7 +71,7 @@ func TestCreateUserAPI(t *testing.T) {
 				FullName: user.FullName,
 				Email: user.Email,
 			},
-			buildStubs: func(store *mockdb.MockStore) {
+			buildStubs: func(store *mockdb.MockStore, taskDistributor *mockwk.MockTaskDistributor) {
 				arg := db.CreateUserTxParams{
 					CreateUserParams: db.CreateUserParams{
 						Username: user.Username,
@@ -70,9 +80,17 @@ func TestCreateUserAPI(t *testing.T) {
 					},
 				}
 				store.EXPECT().
-					CreateUserTx(gomock.Any(), EqCreateUserTxParams(arg, password)).
+					CreateUserTx(gomock.Any(), EqCreateUserTxParams(arg, password, user)).
 					Times(1).
 					Return(db.CreateUserTxResult{User: user}, nil)
+
+				taskPayload := &worker.PayloadSendVerifyEmail{
+					Username: user.Username,
+				}
+				taskDistributor.EXPECT().
+					DistributeTaskSendVerifyEmail(gomock.Any(), taskPayload, gomock.Any()).
+					Times(1).
+					Return(nil)
 			},
 			checkResponse: func(t *testing.T, res *pb.CreateUserResponse, err error) {
 				require.NoError(t, err)
@@ -83,19 +101,46 @@ func TestCreateUserAPI(t *testing.T) {
 				require.Equal(t, user.Email, createdUser.Email)
 			},
 		},
+		{
+			name: "InternalError",
+			req: &pb.CreateUserRequest{
+				Username: user.Username,
+				Password: password,
+				FullName: user.FullName,
+				Email: user.Email,
+			},
+			buildStubs: func(store *mockdb.MockStore, taskDistributor *mockwk.MockTaskDistributor) {
+				store.EXPECT().
+					CreateUserTx(gomock.Any(), gomock.Any()).
+					Times(1).
+					Return(db.CreateUserTxResult{}, sql.ErrConnDone)
+
+				taskDistributor.EXPECT().
+					DistributeTaskSendVerifyEmail(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+			checkResponse: func(t *testing.T, res *pb.CreateUserResponse, err error) {
+				require.Error(t, err)
+				st, ok := status.FromError(err)
+				require.True(t, ok)
+				require.Equal(t, codes.Internal, st.Code())
+			},
+		},
 	}
 
 	for i := range testCases {
 		tc := testCases[i]
 
 		t.Run(tc.name, func(t *testing.T) {
-			ctrl := gomock.NewController(t)
-			defer ctrl.Finish()
+			storeCtrl := gomock.NewController(t)
+			defer storeCtrl.Finish()
+			store := mockdb.NewMockStore(storeCtrl)
 
-			store := mockdb.NewMockStore(ctrl)
-			tc.buildStubs(store)
+			taskCtrl := gomock.NewController(t)
+			defer taskCtrl.Finish()
+			taskDistributor := mockwk.NewMockTaskDistributor(taskCtrl)
 
-			taskDistributor := mockwk.NewMockTaskDistributor(ctrl)
+			tc.buildStubs(store, taskDistributor)
 
 			server := newTestServer(t, store, taskDistributor)
 			res, err := server.CreateUser(context.Background(), tc.req)
