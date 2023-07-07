@@ -32,7 +32,6 @@ service TemplateBackend {
             description: "Use this API to create a new user"
             summary: "Create new user"
         };
-
     }
     rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {
         option (google.api.http) = {
@@ -53,7 +52,6 @@ service TemplateBackend {
             description: "Use this API to update user"
             summary: "Update user"
         };
-
     }
     rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
         option (google.api.http) = {
