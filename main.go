@@ -14,6 +14,7 @@ import (
 	"github.com/hibiken/asynq"
 	"github.com/rakyll/statik/fs"
 	"github.com/rs/zerolog"
+	_ "github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

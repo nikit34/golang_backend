@@ -2,9 +2,9 @@ package gapi
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	db "github.com/nikit34/template_backend/db/sqlc"
 	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/util"
@@ -14,16 +14,15 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-
 func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 	authPayload, err := server.authorizeUser(ctx)
-	if err!= nil {
+	if err != nil {
 		return nil, unauthenticatedError(err)
 	}
 
 	violations := validateUpdateUserRequest(req)
 	if violations != nil {
-		return nil , invalidArgumentError(violations)
+		return nil, invalidArgumentError(violations)
 	}
 
 	if authPayload.Username != req.GetUsername() {
@@ -32,13 +31,13 @@ func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 
 	arg := db.UpdateUserParams{
 		Username: req.GetUsername(),
-		FullName: sql.NullString{
+		FullName: pgtype.Text{
 			String: req.GetFullName(),
-			Valid: req.FullName != nil,
+			Valid:  req.FullName != nil,
 		},
-		Email: sql.NullString{
+		Email: pgtype.Text{
 			String: req.GetEmail(),
-			Valid: req.Email != nil,
+			Valid:  req.Email != nil,
 		},
 	}
 
@@ -49,20 +48,20 @@ func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 			return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)
 		}
 
-		arg.HashedPassword = sql.NullString{
+		arg.HashedPassword = pgtype.Text{
 			String: hashedPassword,
-			Valid: true,
+			Valid:  true,
 		}
 
-		arg.PasswordChangedAt = sql.NullTime{
-			Time: time.Now(),
+		arg.PasswordChangedAt = pgtype.Timestamptz{
+			Time:  time.Now(),
 			Valid: true,
 		}
 	}
 
 	user, err := server.store.UpdateUser(ctx, arg)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if err == db.ErrRecordNotFound {
 			return nil, status.Errorf(codes.NotFound, "user not found")
 		}
 		return nil, status.Errorf(codes.Internal, "failed to update user: %s", err)

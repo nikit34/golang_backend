@@ -20,20 +20,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-
 func TestGetAccountAPI(t *testing.T) {
 	user, _ := randomUser(t)
 	account := randomAccount(user.Username)
 
-	testCases := []struct{
-		name string
-		accountID int64
-		setupAuth func(t *testing.T, request *http.Request, tokenMaker token.Maker)
-		buildStubs func(store *mockdb.MockStore)
+	testCases := []struct {
+		name          string
+		accountID     int64
+		setupAuth     func(t *testing.T, request *http.Request, tokenMaker token.Maker)
+		buildStubs    func(store *mockdb.MockStore)
 		checkResponse func(t *testing.T, recorder *httptest.ResponseRecorder)
-	} {
+	}{
 		{
-			name: "OK",
+			name:      "OK",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
@@ -50,7 +49,7 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 		},
 		{
-			name: "UnauthorizedUser",
+			name:      "UnauthorizedUser",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, "unauthorized_user", time.Minute)
@@ -66,7 +65,7 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 		},
 		{
-			name: "NoAuthorization",
+			name:      "NoAuthorization",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 			},
@@ -80,7 +79,7 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 		},
 		{
-			name: "NotFound",
+			name:      "NotFound",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
@@ -89,14 +88,14 @@ func TestGetAccountAPI(t *testing.T) {
 				store.EXPECT().
 					GetAccount(gomock.Any(), gomock.Eq(account.ID)).
 					Times(1).
-					Return(db.Account{}, sql.ErrNoRows)
+					Return(db.Account{}, db.ErrRecordNotFound)
 			},
 			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusNotFound, recorder.Code)
 			},
 		},
 		{
-			name: "InternalError",
+			name:      "InternalError",
 			accountID: account.ID,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
@@ -112,7 +111,7 @@ func TestGetAccountAPI(t *testing.T) {
 			},
 		},
 		{
-			name: "InvalidID",
+			name:      "InvalidID",
 			accountID: 0,
 			setupAuth: func(t *testing.T, request *http.Request, tokenMaker token.Maker) {
 				addAuthorization(t, request, tokenMaker, authorizationTypeBearer, user.Username, time.Minute)
@@ -420,9 +419,9 @@ func TestListAccountsAPI(t *testing.T) {
 
 func randomAccount(owner string) db.Account {
 	return db.Account{
-		ID: util.RandomInt(1, 1000),
-		Owner: owner,
-		Balance: util.RandomMoney(),
+		ID:       util.RandomInt(1, 1000),
+		Owner:    owner,
+		Balance:  util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
 }
