@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/hibiken/asynq"
-	"github.com/lib/pq"
 	db "github.com/nikit34/template_backend/db/sqlc"
 	"github.com/nikit34/template_backend/pb"
 	"github.com/nikit34/template_backend/util"
